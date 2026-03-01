@@ -1,111 +1,160 @@
 # Local Diamond 💎
 
-Local Diamond 是一款专为开发者设计的安全、本地优先的敏感配置管理工具。它可以将您的敏感密文（如数据库连接字符串、各类第三方 API Keys 等）使用高强度的 `AES-256-CBC` 加密后，安全地保存在您的本地计算机上。
+[![npm version](https://img.shields.io/npm/v/local-diamond.svg?style=flat-square&color=00b4d8)](https://www.npmjs.com/package/local-diamond)
+[![npm downloads](https://img.shields.io/npm/dm/local-diamond.svg?style=flat-square&color=00b4d8)](https://www.npmjs.com/package/local-diamond)
+[![node](https://img.shields.io/badge/runtime-Bun-f472b6?style=flat-square&logo=bun)](https://bun.sh)
 
-## 🌟 核心特性
+**English** | [中文](./README_zh-CN.md)
 
-- **本地存储与安全：** 您的敏感数据将采用高强度 `AES-256-CBC` 算法与严格的 32 字节主密钥进行加密。
-- **无云端暴露：** 没有任何数据会上传至云端或第三方服务器。数据完全私密存储于 `~/.local-diamond/data.json`之中。
-- **主密钥自动生成与管理：** 不必手动记录繁琐的 64 位十六进制主密钥，只需使用一键自动生成功能，CLI 与 UI 皆可将其持久化存储在 `~/.local-diamond-master-key`。
-- **极速 CLI 管理命令行：** 基于 Bun 构建，支持 `lod set`、`lod get` 等命令，即时在终端读写、移除或列出您的数据配置。
-- **内置 Web UI：** 提供清爽、现代化的图形界面交互；基于 HonoJS 与 原生 JavaScript 构建，轻松对数据进行一目了然的操作管理。
-- **一键导入与导出 (备份/迁移)：** 支持将加密数据导出为 JSON 文件进行安全备份，并在全新环境中通过 CLI 或 Web 面板进行无缝合并或覆盖导入。
-- **多语言（i18n）支持：** 内置 🇨🇳 中文（zh） 和 🇺🇸 英文（en）界面。自动获取并可持久化您的语言偏好！
+A secure, local-first sensitive configuration management tool designed for developers. Encrypt your secrets — database connection strings, API keys, tokens, and more — with strong `AES-256-CBC` encryption and store them safely on your local machine.
 
-## 📦 环境要求
+## 🖥️ UI Preview
 
-- **Bun** 运行时。如果您还未安装，请访问 [bun.sh](https://bun.sh) 进行安装。
+<p align="center">
+  <img src="./docs/light-en.png" alt="Light Theme" width="46%" />
+  <img src="./docs/dark-en.png" alt="Dark Theme" width="46%" />
+</p>
 
-## 🚀 快速开始
+<p align="center">
+  <img src="./docs/light-en-shrink.png" alt="Light shrink Theme" width="46%" />
+  <img src="./docs/dark-en-shrink.png" alt="Dark shrink Theme" width="46%" />
+</p>
+## 🌟 Key Features
 
-可以通过 `npm`、`yarn`、`pnpm` 或 `bun` 轻松将其全局安装到您的设备中：
+- **🔐 Local Storage & Security** — Strong `AES-256-CBC` encryption with a strict 32-byte master key
+- **☁️ Zero Cloud Exposure** — Data stays entirely local in `~/.local-diamond/data.json`, never uploaded to any server
+- **🔑 Auto Master Key Management** — One-click generation of a 64-character hex master key, persisted to `~/.local-diamond-master-key`
+- **⚡ Blazing Fast CLI** — Built on Bun with commands like `lod set`, `lod get` for instant terminal access
+- **🌐 Built-in Web UI** — Modern dashboard-style interface with Dark / Light / Auto theme support
+- **📦 Import & Export** — Export encrypted data as JSON for backup; import via CLI or Web panel with merge or overwrite
+- **🌍 i18n Support** — Built-in 🇨🇳 Chinese and 🇺🇸 English interfaces with automatic and persistent language preference
+
+## 📦 Requirements
+
+- **Bun** runtime — Install from [bun.sh](https://bun.sh) if you haven't already.
+
+## 🚀 Quick Start
+
+Install globally via `npm`, `yarn`, `pnpm`, or `bun`:
 
 ```bash
-# 使用 Bun 全局安装（推荐）
+# Using Bun (recommended)
 bun install -g local-diamond
 
-# 或者使用 npm
+# Or using npm
 npm install -g local-diamond
 
-# 您也可以无需安装直接使用（通过 npx 或 bunx）
+# Run without installing (via npx or bunx)
 npx local-diamond ui
 bunx local-diamond ui
 ```
 
-## 💻 CLI 命令行使用指南
+## 💻 CLI Usage
 
-Local Diamond CLI 提供了极为丰富的命令交互。由于加入了全局执行脚本 `lod`，您可以随时随地调取：
+Local Diamond provides a rich CLI accessible via the `lod` command:
 
-### 1. 存储新的敏感配置
+### Store a Secret
+
 ```bash
 lod set DATABASE_URL "postgres://user:pass@localhost:5432/db"
 
-# 💡 推荐：您可以使用带有命名空间的键名，以便为多项目进行完美的密钥隔离管理：
+# 💡 Recommended: Use namespaced keys for multi-project isolation:
 lod set "acme/backend/DATABASE_URL" "postgres://user:pass@localhost:5432/acme_db"
 ```
-> *如果您还没有主密钥（Master Key），系统会帮您自动生成并将其妥善存放到 `~/.local-diamond-master-key`。*
 
-### 2. 获取已有的配置值
+> *If you don't have a Master Key yet, the system will auto-generate one and save it to `~/.local-diamond-master-key`.*
+
+### Retrieve a Secret
+
 ```bash
 lod get DATABASE_URL
-# 输出：postgres://user:pass@localhost:5432/db
+# Output: postgres://user:pass@localhost:5432/db
 ```
 
-### 3. 列出所有保存的配置键名
+### List All Keys
+
 ```bash
 lod list
-# 输出：
+# Output:
 # DATABASE_URL
 # STRIPE_API_KEY
 ```
 
-### 4. 移除并删除特定配置
+### Remove a Secret
+
 ```bash
 lod remove DATABASE_URL
 ```
 
-### 5. 数据的导出与导入
+### Export & Import
+
 ```bash
-# 导出当前数据备份至 json 文件
+# Export to a JSON backup file
 lod export ./my-backup.json
 
-# 将备份重新导入当前计算机
+# Import from a backup file
 lod import ./my-backup.json
 
-# 追加/合并目前存储和备份文件里的参数（如果不加此 flag 将完全覆盖现有数据）
+# Merge with existing data (without this flag, existing data will be overwritten)
 lod import ./my-backup.json --merge
 ```
 
----
+### Use in Shell Scripts
 
-## 🌐 Web 图形界面 (UI)
-
-Local Diamond 捆绑了一个轻量级 Web 服务器供您使用现代化浏览器进行管理，无需背诵命令：
+Combine `lod get` with shell command substitution to inject secrets into your scripts, deploy workflows, or CI pipelines:
 
 ```bash
-# 在默认端口 3000 上启动 UI
-lod ui
+#!/bin/bash
 
-# 在自定义端口上启动界面
-lod ui -p 8080
+# Read secrets from Local Diamond into shell variables
+server_host=$(lod get myapp/server-host)
+server_user=$(lod get myapp/server-user)
+db_url=$(lod get myapp/db-url)
 
-# 强制以中文界面启动
-lod ui --lang zh
+# Use in SSH commands
+ssh ${server_user}@${server_host} "docker run -e DATABASE_URL='${db_url}' myapp:latest"
 
-# 强制以英文界面启动
-lod ui --lang en
+# Use in Docker Compose
+export DATABASE_URL=$(lod get myapp/db-url)
+export REDIS_URL=$(lod get myapp/redis-url)
+docker compose up -d
 
-# 设置全局首选项，以后启动时都会默认保持该语言
-lod ui --default-lang zh
+# Generate a .env file from stored secrets
+echo "DATABASE_URL=$(lod get myapp/db-url)" > .env
+echo "API_KEY=$(lod get myapp/api-key)" >> .env
+echo "JWT_SECRET=$(lod get myapp/jwt-secret)" >> .env
 ```
-
-执行后，打开浏览器访问 `http://localhost:3000` 即可自由地进行所有增、删、改、查、生成密钥及全量的导入和导出操作！
 
 ---
 
-## 💻 在您的项目中使用 API
+## 🌐 Web UI
 
-在平时开发中，如果您的应用需要读取本地存储的密钥，可以直接引入该库：
+Local Diamond ships with a lightweight web server for browser-based management:
+
+```bash
+# Start on default port 3000
+lod ui
+
+# Custom port
+lod ui -p 8080
+
+# Force Chinese interface
+lod ui --lang zh
+
+# Force English interface
+lod ui --lang en
+
+# Set default language preference
+lod ui --default-lang en
+```
+
+Then open `http://localhost:3000` in your browser to manage all your secrets — create, read, update, delete, generate keys, and import/export data!
+
+---
+
+## 💻 Programmatic API
+
+For applications that need to read locally stored secrets, import the library directly:
 
 ```bash
 bun add -D local-diamond
@@ -114,26 +163,26 @@ bun add -D local-diamond
 ```typescript
 import { get, set, list, readMasterKey } from 'local-diamond';
 
-// 1. 读取系统持久化的主密钥（如果之前通过 CLI 或 UI 生成过）
+// 1. Read the persisted master key (generated via CLI or UI)
 const myMasterKey = readMasterKey();
 
 if (!myMasterKey) {
-  console.log('未找到主密钥，请先运行 `lod ui` 进行配置！');
+  console.log('No master key found. Run `lod ui` to set one up!');
 } else {
-  // 2. 将数据写入本地加密库
+  // 2. Store an encrypted secret
   set('GITHUB_TOKEN', 'ghp_xxxxxx...', myMasterKey);
 
-  // 💡 推荐：为了对多个项目的密钥进行高效管理和隔离，建议采用 `命名空间/项目名/配置键` 的命名规范：
+  // 💡 Recommended: Use namespace/project/key naming for multi-project isolation:
   set('acme-corp/user-service/GITHUB_TOKEN', 'ghp_yyyyyy...', myMasterKey);
 
-  // 3. 读取解密后的数据
+  // 3. Read a decrypted secret
   const token = get('acme-corp/user-service/GITHUB_TOKEN', myMasterKey);
-  console.log('您的项目 Token 为:', token);
+  console.log('Your token:', token);
 
-  // 4. 获取当前存储的所有参数名称
+  // 4. List all stored key names
   const allKeys = list();
-  console.log('配置库中拥有：', allKeys);
+  console.log('Stored keys:', allKeys);
 }
 ```
 
-除此之外，还暴露了完整的生命周期管理函数供深度定制使用： `generateMasterKey, encrypt, decrypt, remove, exportData, importData, writeMasterKey` 等等。
+Additional lifecycle functions are also exported for advanced use: `generateMasterKey`, `encrypt`, `decrypt`, `remove`, `exportData`, `importData`, `writeMasterKey`, and more.
