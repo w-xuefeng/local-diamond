@@ -1,5 +1,5 @@
 ---
-name: Local Diamond CLI (lod)
+name: lod-cli
 description: Commands and instructions for interacting with the local-diamond project's CLI tool to manage encrypted sensitive data locally.
 ---
 
